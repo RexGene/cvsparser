@@ -5,7 +5,7 @@
 ```go
 import csvparser
 
-records, err := Parse("test.csv")
+records, err := csvparser.Parse("test.csv")
 if err != nil {
     println(err)
     return
