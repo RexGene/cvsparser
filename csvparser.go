@@ -4,9 +4,43 @@ import (
 	"encoding/csv"
 	"errors"
 	"os"
+	"strconv"
 )
 
-type Result map[string]map[string]string
+type CsvValue string
+
+func (this CsvValue) Int(v int) int {
+	value, err := strconv.ParseInt(string(this), 10, 32)
+	if err != nil {
+		return v
+	}
+
+	return int(value)
+}
+
+func (this CsvValue) Uint(v uint) uint {
+	value, err := strconv.ParseUint(string(this), 10, 32)
+	if err != nil {
+		return v
+	}
+
+	return uint(value)
+}
+
+func (this CsvValue) Float(v float32) float32 {
+	value, err := strconv.ParseFloat(string(this), 32)
+	if err != nil {
+		return v
+	}
+
+	return float32(value)
+}
+
+func (this CsvValue) Str() string {
+	return string(this)
+}
+
+type Result map[string]map[string]CsvValue
 
 func Parse(fileName string) (result Result, err error) {
 	file, err := os.Open(fileName)
@@ -41,10 +75,10 @@ func Parse(fileName string) (result Result, err error) {
 			return
 		}
 
-		resultRow := make(map[string]string)
+		resultRow := make(map[string]CsvValue)
 		result[row[0]] = resultRow
 		for i, value := range row {
-			resultRow[heads[i]] = value
+			resultRow[heads[i]] = CsvValue(value)
 		}
 	}
 
