@@ -1,4 +1,4 @@
-# svnparser
+# cvsparser
 
 ## Usage
 
